@@ -1,0 +1,28 @@
+# Test-only datasource — overrides main application.yml
+# Uses H2 in-memory DB so tests never require a running PostgreSQL
+spring:
+  datasource:
+    url: jdbc:h2:mem:auth_test_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop       # H2 managed in tests
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  flyway:
+    enabled: false                # Flyway disabled in tests; Hibernate creates schema
+
+jwt:
+  secret: 9a4f2c8d3e7b1a5f6c8d2e4a7b9c1d3e5f7a8b0c2d4e6f8a1b3c5d7e9f0a2b4c
+  access-token-expiration: 900000     # 15 minutes in ms
+  refresh-token-expiration: 604800000 # 7 days in ms
+  issuer: enterprise-auth-service
+
+security:
+  lockout:
+    max-attempts: 5
+    lock-duration-minutes: 15
+

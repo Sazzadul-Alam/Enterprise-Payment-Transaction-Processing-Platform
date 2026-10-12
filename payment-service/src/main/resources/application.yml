@@ -5,6 +5,36 @@ spring:
   application:
     name: payment-service
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment_db
+    username: ${DB_PAYMENT_USER:payment_svc_user}
+    password: ${DB_PAYMENT_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 3
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: PaymentServiceHikariPool
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: public
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+
 management:
   endpoints:
     web:
